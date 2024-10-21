@@ -119,7 +119,11 @@
 		</dependency>
 
 		<!-- Runtime dependencies -->
-
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+	    		<version>3.4.1</version> <!-- Überprüfe die neueste Version -->
+		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
