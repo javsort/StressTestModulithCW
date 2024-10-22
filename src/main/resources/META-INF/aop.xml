@@ -1,0 +1,14 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+<aspectj>
+	<weaver options="-verbose -showWeaveInfo">
+		<include within="de.unistuttgart.t2.modulith.*" />
+		<include within="de.unistuttgart.t2.modulith.cart.*" />
+		<include within="de.unistuttgart.t2.modulith.uibackend.*" />
+		<include within="de.unistuttgart.t2.modulith.payment.*" />
+		<include within="de.unistuttgart.t2.modulith.order.*" />
+		<include within="de.unistuttgart.t2.modulith.ui.*" />
+	</weaver>
+	<aspects>
+		<aspect	name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull" />
+	</aspects>
+</aspectj>
