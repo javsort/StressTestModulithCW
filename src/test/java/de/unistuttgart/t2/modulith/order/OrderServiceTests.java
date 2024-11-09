@@ -45,10 +45,10 @@ public class OrderServiceTests {
         when(inventoryService.getProducts(anyCollection())).thenReturn(inventoryResponseOneProductInList());
         when(orderRepository.save(any())).thenReturn(new OrderItem(sessionId));
 
-        orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum");
+        orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastname", "cardOwnerAddress");
 
         verify(cartService, times(1)).getCart(sessionId);
-        verify(paymentService, times(1)).doPayment(anyString(), anyString(), anyString(), anyDouble());
+        verify(paymentService, times(1)).doPayment(anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString(), anyString(), anyString());
         verify(inventoryService, times(1)).commitReservations(sessionId);
         verify(cartService, times(1)).deleteCart(sessionId);
     }

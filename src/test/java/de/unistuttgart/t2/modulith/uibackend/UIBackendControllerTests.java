@@ -105,10 +105,10 @@ public class UIBackendControllerTests {
     @Test
     public void confirmOrder() throws OrderNotPlacedException {
 
-        OrderRequest request = new OrderRequest("cardNumber", "cardOwner", "checksum", sessionId);
+        OrderRequest request = new OrderRequest("cardNumber", "cardOwner", "checksum", sessionId, "cardType", "cardExpiry", "cardOwnerLastname", "cardOwnerAddress");
         controller.confirmOrder(request);
 
-        verify(service).confirmOrder(sessionIdCaptor.capture(), anyString(), anyString(), anyString());
+        verify(service).confirmOrder(sessionIdCaptor.capture(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
         assertEquals(sessionId, sessionIdCaptor.getValue());
     }
 

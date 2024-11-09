@@ -46,8 +46,10 @@ public class PaymentRequestTests {
             .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
 
         // execute
+        
+        // Exercise 1.B. -> Test Adjustments
         assertThrows(PaymentFailedException.class, () ->
-            service.doPayment("cardNumber", "cardOwner", "checksum", 1234.5));
+            service.doPayment("cardNumber", "cardOwner", "checksum", 1234.5, "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress"));
         mockServer.verify();
     }
 
@@ -57,7 +59,9 @@ public class PaymentRequestTests {
             .andRespond(withStatus(HttpStatus.OK));
 
         // execute
-        service.doPayment("cardNumber", "cardOwner", "checksum", 1234.5);
+        
+        // Exercise 1.B. -> Test Adjustments
+        service.doPayment("cardNumber", "cardOwner", "checksum", 1234.5, "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress");
         mockServer.verify();
     }
 }

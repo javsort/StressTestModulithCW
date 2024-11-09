@@ -63,12 +63,12 @@ public class UIBackendServiceTests {
 
     @Test
     public void confirmOrder() throws Exception {
-
+        // Exercise 1.B. -> Test Adjustments
         // execute
-        service.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum");
+        service.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastname", "cardOwnerAddress");
 
         // assert
-        verify(orderService).confirmOrder(sessionIdCaptor.capture(), anyString(), anyString(), anyString());
+        verify(orderService).confirmOrder(sessionIdCaptor.capture(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
         assertEquals(sessionId, sessionIdCaptor.getValue());
     }
 

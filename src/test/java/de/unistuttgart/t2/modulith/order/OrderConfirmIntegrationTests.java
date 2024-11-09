@@ -80,31 +80,33 @@ public class OrderConfirmIntegrationTests {
 
     @Test
     public void confirmOrder_Succeeds() throws Exception {
-
+        
+        // Coursework Exercise 1.B. -> Test Adjustments
         // execute
         String id = orderService.confirmOrder(
-            sessionId, "cardNumber", "cardOwner", "checksum");
+            sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress");
 
         // assert
         assertTrue(orderRepository.findById(id).isPresent(), "Expected order is created in database");
         assertFalse(cartRepository.findById(sessionId).isPresent(), "Expected cart to be deleted");
         assertEquals(0, reservationRepository.findAll().size(), "Expected reservations are committed");
-        verify(paymentService, times(1)).doPayment(anyString(), anyString(), anyString(), anyDouble());
+        verify(paymentService, times(1)).doPayment(anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString(), anyString(), anyString());
         verify(cartService, times(1)).deleteCart(sessionId);
     }
 
     @Test
     public void confirmOrder_CalledMultipleTimes_ErrorIsThrown() throws Exception {
 
+        // Coursework Exercise 1.B. -> Test Adjustments
         // execute first time
         orderService.confirmOrder(
-            sessionId, "cardNumber", "cardOwner", "checksum");
+            sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress");
         // execute second time → exception is expected, because cart is empty
         assertThrows(Exception.class, () -> orderService.confirmOrder(
-            sessionId, "cardNumber", "cardOwner", "checksum"));
+            sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress"));
 
         // assert
-        verify(paymentService, atMostOnce()).doPayment(anyString(), anyString(), anyString(), anyDouble());
+        verify(paymentService, atMostOnce()).doPayment(anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString(), anyString(), anyString());
         verify(inventoryService, atMostOnce()).commitReservations(sessionId);
         verify(cartService, atMostOnce()).deleteCart(sessionId);
     }
@@ -115,9 +117,11 @@ public class OrderConfirmIntegrationTests {
         // setup
         when(inventoryService.getProducts(anyCollection())).thenThrow(new RuntimeException("runtime error"));
 
+        
+        // Coursework Exercise 1.B. -> Test Adjustments
         // execute
         Exception actualException = assertThrows(Exception.class,
-            () -> orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum"));
+            () -> orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress"));
 
         // assert
         assertNotNull(actualException);
@@ -126,7 +130,7 @@ public class OrderConfirmIntegrationTests {
         assertEquals(0, orderRepository.findAll().size(), "Expected no order in database");
         assertTrue(cartRepository.findById(sessionId).isPresent(), "Expected cart still be in database");
         assertEquals(1, reservationRepository.findAll().size(), "Expected reservations are still in database");
-        verify(paymentService, never()).doPayment(anyString(), anyString(), anyString(), anyDouble());
+        verify(paymentService, never()).doPayment(anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -135,9 +139,10 @@ public class OrderConfirmIntegrationTests {
         // setup
         cartRepository.deleteAll();
 
+        // Coursework Exercise 1.B. -> Test Adjustments
         // execute
         Exception actualException = assertThrows(Exception.class,
-            () -> orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum"));
+            () -> orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress"));
 
         // assert
         assertNotNull(actualException);
@@ -145,7 +150,7 @@ public class OrderConfirmIntegrationTests {
             String.format("Actual exception message: %s", actualException.getMessage()));
         assertEquals(0, orderRepository.findAll().size(), "Expected no order in database");
         assertEquals(1, reservationRepository.findAll().size(), "Expected reservations are still in database");
-        verify(paymentService, never()).doPayment(anyString(), anyString(), anyString(), anyDouble());
+        verify(paymentService, never()).doPayment(anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString(), anyString(), anyString());
 
     }
 
@@ -154,11 +159,13 @@ public class OrderConfirmIntegrationTests {
 
         // setup
         doThrow(new PaymentFailedException("payment failed"))
-            .when(paymentService).doPayment(anyString(), anyString(), anyString(), anyDouble());
+            // Coursework Exercise 1.B. -> Test Adjustments
+            .when(paymentService).doPayment(anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString(), anyString(), anyString());
 
         // execute
         Exception actualException = assertThrows(Exception.class,
-            () -> orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum"));
+            // Coursework Exercise 1.B. -> Test Adjustments
+            () -> orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress"));
 
         // assert
         assertNotNull(actualException);

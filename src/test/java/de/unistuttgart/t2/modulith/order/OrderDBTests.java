@@ -88,7 +88,7 @@ public class OrderDBTests {
             .thenReturn(inventoryResponseOneProductInList());
 
         // execute
-        String id = orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum");
+        String id = orderService.confirmOrder(sessionId, "cardNumber", "cardOwner", "checksum", "cardType", "cardExpiry", "cardOwnerLastName", "cardOwnerAddress");
 
         // assert
         assertTrue(orderRepository.existsById(id));
