@@ -108,8 +108,9 @@ public class UIBackendController {
     @PostMapping("/confirm")
     public void confirmOrder(@RequestBody OrderRequest request)
         throws OrderNotPlacedException {
+            // Coursework Exercise 1.B. -> Necessary changes to Order Request
         service.confirmOrder(request.getSessionId(), request.getCardNumber(), request.getCardOwner(),
-            request.getChecksum());
+            request.getChecksum(), request.getCardType(), request.getCardExpiry(), request.getCardOwnerLastname(), request.getCardOwnerAddress());
     }
 
     /**

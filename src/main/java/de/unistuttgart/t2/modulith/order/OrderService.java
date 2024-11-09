@@ -87,11 +87,21 @@ public class OrderService {
      * @param cardNumber part of payment details
      * @param cardOwner  part of payment details
      * @param checksum   part of payment details
+     * 
+     * Parameters added for Coursework Exercise 1.B
+     * @param cardType
+     * @param cardExpiry
+     * @param cardOwnerLastName
+     * @param cardOwnerAddress
+     * 
+     * 
      * @return identifies the order
      * @throws Exception if the order to confirm is empty, would result in a negative sum
      *                   or if there are any other errors during the placement of the order
      */
-    public String confirmOrder(String sessionId, String cardNumber, String cardOwner, String checksum) throws Exception {
+    
+    // Coursework Exercise 1.B. -> Necessary changes to confirm order
+    public String confirmOrder(String sessionId, String cardNumber, String cardOwner, String checksum,  String cardType, String cardExpiry, String cardOwnerLastName, String cardOwnerAddress) throws Exception {
 
         // Calculating total
         double total;
@@ -109,7 +119,9 @@ public class OrderService {
 
         // Do payment
         try {
-            paymentService.doPayment(cardNumber, cardOwner, checksum, total);
+            
+            // Coursework Exercise 1.B. -> Necessary changes to confirm order
+            paymentService.doPayment(cardNumber, cardOwner, checksum, total, cardType, cardExpiry, cardOwnerLastName, cardOwnerAddress);
             LOG.info("Payment of order '{}' was successful!", orderId);
         } catch (PaymentFailedException e) {
             LOG.error("Payment of order '{}' failed! Rejecting order.", orderId);

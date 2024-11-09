@@ -157,10 +157,18 @@ public class UIBackendService {
      * @param cardNumber part of payment details
      * @param cardOwner  part of payment details
      * @param checksum   part of payment details
+     *
+     * Parameters added for Coursework Exercise 1.B
+     * @param cardType
+     * @param cardExpiry
+     * @param cardOwnerLastName
+     * @param cardOwnerAddress
      */
-    public void confirmOrder(String sessionId, String cardNumber, String cardOwner, String checksum) throws OrderNotPlacedException {
+    
+    // Coursework Exercise 1.B. -> Necessary changes to confirm order
+    public void confirmOrder(String sessionId, String cardNumber, String cardOwner, String checksum, String cardType, String cardExpiry, String cardOwnerLastName, String cardOwnerAddress) throws OrderNotPlacedException {
         try {
-            orderService.confirmOrder(sessionId, cardNumber, cardOwner, checksum);
+            orderService.confirmOrder(sessionId, cardNumber, cardOwner, checksum, cardType, cardExpiry, cardOwnerLastName, cardOwnerAddress);
         } catch (Exception e) {
             throw new OrderNotPlacedException(e.getMessage());
         }

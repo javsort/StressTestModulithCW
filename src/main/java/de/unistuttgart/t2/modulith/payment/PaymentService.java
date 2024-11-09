@@ -56,7 +56,9 @@ public class PaymentService {
      * Contact some payment provider to execute the payment. The call might either timeout, or the payment itself might
      * fail, or it is successful.
      */
-    public void doPayment(String cardNumber, String cardOwner, String checksum, double total) throws PaymentFailedException {
+    
+    // Coursework Exercise 1.B. -> Necessary changes to confirm order
+    public void doPayment(String cardNumber, String cardOwner, String checksum, double total, String cardType, String cardExpiry, String cardOwnerLastName, String cardOwnerAddress) throws PaymentFailedException {
         if (!enabled) {
             LOG.warn("Connecting to payment provider is disabled by configuration for testing purposes! " +
                 "Returning as payment was successful.");
@@ -64,7 +66,8 @@ public class PaymentService {
         }
 
         try {
-            PaymentData paymentData = new PaymentData(cardNumber, cardOwner, checksum, total);
+            // Coursework Exercise 1.B. -> Necessary changes to confirm order
+            PaymentData paymentData = new PaymentData(cardNumber, cardOwner, checksum, total,  cardType, cardExpiry, cardOwnerLastName, cardOwnerAddress);
             Retry.decorateSupplier(retry, () -> template.postForObject(providerUrl, paymentData, Void.class)).get();
         } catch (RestClientException e) {
             LOG.error("Payment failed! Error: {}", e.getMessage());

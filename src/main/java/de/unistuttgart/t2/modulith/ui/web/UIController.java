@@ -117,7 +117,8 @@ public class UIController {
         LOG.debug("Confirm order | SessionID: {}", session.getId());
 
         try {
-            uiBackendService.confirmOrder(session.getId(), details.getCardNumber(), details.getCardOwner(), details.getChecksum());
+            // Exercise 1.B. -> Add properties to confirm order
+            uiBackendService.confirmOrder(session.getId(), details.getCardNumber(), details.getCardOwner(), details.getChecksum(), details.getCardType(), details.getCardExpiry(), details.getCardOwnerLastname(), details.getCardOwnerAddress());
             model.addAttribute("title", "Confirmed");
         } catch (OrderNotPlacedException e) {
             LOG.error(e.getMessage());
