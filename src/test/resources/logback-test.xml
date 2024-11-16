@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Title: logback-test.xml
     Author: Stephane Landelle @slandelle - https://github.com/slandelle
@@ -6,7 +7,6 @@
     Availability: https://github.com/gatling/gatling-maven-plugin-demo-java/blob/main/src/test/resources/logback-test.xml
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
