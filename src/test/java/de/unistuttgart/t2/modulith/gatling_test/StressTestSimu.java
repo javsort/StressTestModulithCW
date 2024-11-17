@@ -5,9 +5,14 @@ package de.unistuttgart.t2.modulith.gatling_test;
 import io.gatling.javaapi.core.ChainBuilder; 
 import io.gatling.javaapi.core.ScenarioBuilder; 
 import io.gatling.javaapi.core.Simulation; 
-import io.gatling.javaapi.http.HttpProtocolBuilder; 
+import io.gatling.javaapi.http.HttpProtocolBuilder;
+
+import org.json.JSONObject;
+
 import static io.gatling.javaapi.core.CoreDsl.*; 
 import static io.gatling.javaapi.http.HttpDsl.*;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /*
@@ -22,32 +27,56 @@ public class StressTestSimu extends Simulation {
 
     private int itemsAmt = Integer.parseInt(System.getProperty("itemsAmt", "6"));
 
+    // 0.1 Get session Id
+    ChainBuilder getSessionId = exec(
+        http("Get Session Id")
+            .get("/session")
+            .check(status().is(200))
+            .check(bodyString().saveAs("sessionId"))
+    );
 
     // A. Browse the items
     ChainBuilder browse = exec(
         http("Browse Items")
             .get("/products")
             .check(status().is(200))
-            .check(jsonPath("$[0].id").exists().saveAs("randomItemId"))
-            .check(header("JSESSIONID").saveAs("sessionId"))
-    );
+            .check(jsonPath("$[*]").findAll().saveAs("teaArray")) // Save all items in the array
+    ).exec(session -> {
+        // Get arr[] size and get the random position
+        java.util.List<String> teaArray = session.getList("teaArray");
 
-    // B. Add a random item to the cart (CONFIGURABLE by randomItemId)
-    /*ChainBuilder addRandomToCart = exec(
-        http("Add an amount of random items to Cart")
-            .post("/cart/#{randomItemId}")  // Use the extracted value from browse
-            .body(StringBody("{ \"id\": \"#{randomItemId}\", \"content\": { \"key\": 1 }, \"creationDate\": \"2024-11-16T00:00:00Z\" }"))
-            .asJson()
-            .check(status().is(201))
-    );*/
+        if (teaArray == null || teaArray.isEmpty()) {
+            System.err.println("Error: No products available in /products response.");
+            throw new RuntimeException("No products available."); // Abort simulation
+        }
 
+        int randomIndex = ThreadLocalRandom.current().nextInt(teaArray.size());
+
+        String teaJson = teaArray.get(randomIndex);
+        String randomItemId = "";
+
+        try {
+            // Support on java JSON library to extract id
+            JSONObject teaObject = new JSONObject(teaJson);
+            randomItemId = teaObject.getString("id");
+
+        } catch (Exception e){
+            System.err.println("unable to JSONify the tea object: " + teaJson);
+        }
+
+        System.out.println("Selected randomItemId: " + randomItemId);
+
+        return session.set("randomItemId", randomItemId);
+    });
+
+    // B. Add a random item to the cart (CONFIGURABLE by itemsAmt)
     ChainBuilder addRandomToCart = repeat(itemsAmt).on(
         exec(
             http("Add an amount of random items to Cart")
-                .post("/cart/#{randomItemId}")  // Use the extracted value from browse
-                .body(StringBody("{ \"id\": \"#{randomItemId}\", \"content\": { \"key\": 1 }, \"creationDate\": \"2024-11-16T00:00:00Z\" }"))
+                .post("/cart/#{sessionId}")  // Use the extracted value from browse
+                .body(StringBody("{ \"content\": { \"#{randomItemId}\": 1 } }"))
                 .asJson()
-                .check(status().is(201))
+                .check(status().is(200))
         )
     );
 
@@ -69,7 +98,7 @@ public class StressTestSimu extends Simulation {
     );
 
     // ~. Think -> placed somewhere in the middle of the scenario
-    ChainBuilder think = exec(pause(java.time.Duration.ofSeconds(thinkTime)));
+    ChainBuilder think = exec(pause(thinkTime));
 
     HttpProtocolBuilder httpProtocol = http
     .baseUrl("http://localhost:8081")
@@ -79,38 +108,25 @@ public class StressTestSimu extends Simulation {
     .inferHtmlResources();
 
     ScenarioBuilder stressTest = scenario("Stress Test")
+    .exec(getSessionId)
     .exec(browse)
+    // Verify a random Id was selected
+    .exec(session -> {
+        if(!session.contains("randomItemId")) {
+            System.err.println("randomItemId is missing in the session");
+            throw new RuntimeException("randomItemId not found");
+        }
+        return session;
+    })
     .exec(think)
     .exec(addRandomToCart)
     .exec(think)
     .exec(confirm);
-    
-    /*ScenarioBuilder stressTestInOnemethod = scenario("Stress Test II")
-    .exec(
-        http("Browse Items")
-            .get("/products")
-            .check(status().is(200))
-    )
-    .pause(java.time.Duration.ofSeconds(thinkTime))
-
-    .exec(
-        http("Add an amount of random items to Cart")
-        .post("/cart/add")
-        .formParam("id", String.valueOf(randomItemId))
-        .check(status().is(200))
-    )
-    .pause(java.time.Duration.ofSeconds(thinkTime))
-
-    .exec(
-        http("Confirm Cart")
-            .get("/cart/confirm")
-            .check(status().is(200))
-    );*/
 
     {
         setUp(
             stressTest.injectOpen(
-                constantUsersPerSec(10).during(60).randomized()
+                constantUsersPerSec(5).during(30).randomized()
             ).protocols(httpProtocol)
         );
     }

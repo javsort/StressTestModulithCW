@@ -219,9 +219,9 @@
 
 			<!-- Gatling plugin - Coursework 1.C. -->
 			<plugin>
-			<groupId>io.gatling</groupId>
-			<artifactId>gatling-maven-plugin</artifactId>
-			<version>4.10.2</version>
+				<groupId>io.gatling</groupId>
+				<artifactId>gatling-maven-plugin</artifactId>
+				<version>4.10.2</version>
 			</plugin>
 		</plugins>
 	</build>

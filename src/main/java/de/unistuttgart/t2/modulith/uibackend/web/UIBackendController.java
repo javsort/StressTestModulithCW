@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +40,23 @@ public class UIBackendController {
         this.service = service;
     }
 
+    // Coursework 1.D. Return session id for testing
+    @Operation(summary = "Get session id")
+    @GetMapping("/session")
+    public String getSessionId(HttpSession session) {
+        return session.getId();
+    }
+
     /**
      * @return a list of all products in the inventory
      */
     @Operation(summary = "List all available products")
     @GetMapping("/products")
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts(HttpSession session) {
+
+        String sessionId = session.getId();
+        System.out.println("Got request to retrieve all products from - Session ID: " + sessionId);
+        
         return service.getAllProducts();
     }
 
