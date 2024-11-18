@@ -7,6 +7,9 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation; 
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.json.JSONObject;
 
 import static io.gatling.javaapi.core.CoreDsl.*; 
@@ -22,10 +25,23 @@ import java.util.concurrent.ThreadLocalRandom;
 */
 public class StressTestSimu extends Simulation {
 
-    // The time to wait between each action - based on student Id last digit -> 7
-    private int thinkTime = 7;
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
+    // The amount of items to add to the cart
     private int itemsAmt = Integer.parseInt(System.getProperty("itemsAmt", "6"));
+    
+    // The test length in seconds
+    private int testLen = Integer.parseInt(System.getProperty("testLen", "300"));
+    
+    // The number of users per second to start with
+    private int usersPerSec = Integer.parseInt(System.getProperty("usersPerSec", "1"));
+    
+    // The maximum number of users per second
+    private int maxUsersPerSec = Integer.parseInt(System.getProperty("maxUsersPerSec", "50"));
+
+    
+    // The time to wait between each action - based on student Id last digit -> 7
+    private int thinkTime = Integer.parseInt(System.getProperty("thinkTime", "7"));
 
     // 0.1 Get session Id
     ChainBuilder getSessionId = exec(
@@ -64,7 +80,7 @@ public class StressTestSimu extends Simulation {
             System.err.println("unable to JSONify the tea object: " + teaJson);
         }
 
-        System.out.println("Selected randomItemId: " + randomItemId);
+        // System.out.println("Selected randomItemId: " + randomItemId);
 
         return session.set("randomItemId", randomItemId);
     });
@@ -124,9 +140,27 @@ public class StressTestSimu extends Simulation {
     .exec(confirm);
 
     {
+        
+        LOG.info("Starting stress test simulation with the following details...");
+        LOG.info("Open Injection method: rampUsersPerSec(usersPerSec).to(maxUsersPerSec).during(testLen)");
+        
+        LOG.info("Items amount: " + itemsAmt);
+        LOG.info("Test length: " + testLen + " seconds");
+        LOG.info("Users per second: " + usersPerSec);
+
+        LOG.info("Think time between ChainBuilders: " + thinkTime + " seconds");
+
+        try {
+            Thread.sleep(1000);                 // Wait for the logger to print
+
+        } catch (InterruptedException e) {
+            LOG.error("Thread was interrupted", e);
+            Thread.currentThread().interrupt();
+        }
+
         setUp(
             stressTest.injectOpen(
-                constantUsersPerSec(5).during(30).randomized()
+                rampUsersPerSec(usersPerSec).to(maxUsersPerSec).during(testLen)
             ).protocols(httpProtocol)
         );
     }
