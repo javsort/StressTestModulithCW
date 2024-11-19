@@ -37,11 +37,10 @@ public class StressTestSimu extends Simulation {
     private int usersPerSec = Integer.parseInt(System.getProperty("usersPerSec", "1"));
     
     // The maximum number of users per second
-    private int maxUsersPerSec = Integer.parseInt(System.getProperty("maxUsersPerSec", "50"));
-
+    private int maxUsersPerSec = Integer.parseInt(System.getProperty("maxUsersPerSec", "25"));
     
     // The time to wait between each action - based on student Id last digit -> 7
-    private int thinkTime = Integer.parseInt(System.getProperty("thinkTime", "7"));
+    private int thinkTime = Integer.parseInt(System.getProperty("thinkTime", "2"));
 
     // 0.1 Get session Id
     ChainBuilder getSessionId = exec(
