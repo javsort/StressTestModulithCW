@@ -1,6 +1,9 @@
 
 # Coursework 1 - Internet Applications Engineering - Stress Test
 
+## Build Modulith:
+With the docker daemon running, simply run the .bat file `re_build_n_contain.bat`.
+
 ## How to run the Stress Test
 
 > ⚠️ **ATTENTION!**
@@ -16,6 +19,9 @@ To run configuration B, it is sufficient to first:
 - Uncomment the `Thread.sleep();` argument at line 111 at [UIBackendService.java](./src/main/java/de/unistuttgart/t2/modulith/uibackend/UIBackendService.java) 
 - Re-run the script `re_build_n_contain.bat`
 - And once the containers are running again, run the `run_t_test.bat` script in a separate terminal with no extra arguments, predefined values should work for both tests. 
+
+> ⚠️ **ATTENTION!**
+> The Stress Tests containing the results for both runs are found under the [test_results](./test_results/) folder
 
 **Consult the secion below to find out what each .bat file is for:**
 
