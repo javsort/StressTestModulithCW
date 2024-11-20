@@ -1,5 +1,16 @@
 package de.unistuttgart.t2.modulith.uibackend;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
 import de.unistuttgart.t2.modulith.cart.CartContent;
 import de.unistuttgart.t2.modulith.cart.CartService;
 import de.unistuttgart.t2.modulith.computation_simulator.ComputationSimulatorService;
@@ -9,16 +20,6 @@ import de.unistuttgart.t2.modulith.inventory.Product;
 import de.unistuttgart.t2.modulith.order.OrderService;
 import de.unistuttgart.t2.modulith.uibackend.exceptions.OrderNotPlacedException;
 import de.unistuttgart.t2.modulith.uibackend.exceptions.ReservationFailedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Manages interaction with other modules.
@@ -97,6 +98,18 @@ public class UIBackendService {
                 "Adding item %s with %s units to cart of session %s failed. Reason: %s",
                 productId, units, sessionId, e.getMessage()));
         }
+
+        /*
+         * STRESS TEST CONFIGURATION B SETUP
+         * 
+         * Coursework 1.E. Configuration B Setup -> To add the delay, uncomment the following line & re-build the project with the .bat script
+         * 
+         * Last digit of student ID: 7 -> 7 seconds delay
+         */
+
+        // Right about here | 
+        // try { Thread.sleep(7000); } catch (InterruptedException e) { e.printStackTrace(); }
+
         cartService.addItemToCart(sessionId, productId, units);
         return addedProduct;
     }
