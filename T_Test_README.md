@@ -1,7 +1,7 @@
 
-# Coursework 1 - Internet Applications Engineering
+# Coursework 1 - Internet Applications Engineering - Stress Test
 
-## How to run the t-test
+## How to run the Stress Test
 
 > ⚠️ **ATTENTION!**
 > The Stress Tests for this project were ran on Gatling 3.12.0. Even though there's a newer version, it is adviced to still not modify the test version to ensure proper functionality.
@@ -19,7 +19,7 @@ To run configuration B, it is sufficient to first:
 
 **Consult the secion below to find out what each .bat file is for:**
 
-## .bat files and what they do:
+## /.bat files and their functionality:
 - `re_build_n_contain.bat` :
     - Un-deploy the containers (if existent)
     - Re-build the maven project

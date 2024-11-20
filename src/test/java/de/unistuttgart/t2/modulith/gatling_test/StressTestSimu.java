@@ -2,20 +2,26 @@ package de.unistuttgart.t2.modulith.gatling_test;
 
 //import io.gatling.core.scenario.Simulation;
 
-import io.gatling.javaapi.core.ChainBuilder; 
-import io.gatling.javaapi.core.ScenarioBuilder; 
-import io.gatling.javaapi.core.Simulation; 
-import io.gatling.javaapi.http.HttpProtocolBuilder;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.json.JSONObject;
-
-import static io.gatling.javaapi.core.CoreDsl.*; 
-import static io.gatling.javaapi.http.HttpDsl.*;
-
-import java.util.concurrent.ThreadLocalRandom;
+import io.gatling.javaapi.core.ChainBuilder;
+import static io.gatling.javaapi.core.CoreDsl.StringBody;
+import static io.gatling.javaapi.core.CoreDsl.bodyString;
+import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.jsonPath;
+import static io.gatling.javaapi.core.CoreDsl.pause;
+import static io.gatling.javaapi.core.CoreDsl.rampUsersPerSec;
+import static io.gatling.javaapi.core.CoreDsl.repeat;
+import static io.gatling.javaapi.core.CoreDsl.scenario;
+import io.gatling.javaapi.core.ScenarioBuilder;
+import io.gatling.javaapi.core.Simulation;
+import static io.gatling.javaapi.http.HttpDsl.http;
+import static io.gatling.javaapi.http.HttpDsl.status;
+import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 
 /*
@@ -139,13 +145,13 @@ public class StressTestSimu extends Simulation {
     .exec(confirm);
 
     {
-        
         LOG.info("Starting stress test simulation with the following details...");
         LOG.info("Open Injection method: rampUsersPerSec(usersPerSec).to(maxUsersPerSec).during(testLen)");
         
         LOG.info("Items amount: " + itemsAmt);
         LOG.info("Test length: " + testLen + " seconds");
         LOG.info("Users per second: " + usersPerSec);
+        LOG.info("Max users per second: " + maxUsersPerSec);
 
         LOG.info("Think time between ChainBuilders: " + thinkTime + " seconds");
 
