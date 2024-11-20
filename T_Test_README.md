@@ -3,6 +3,9 @@
 
 ## How to run the t-test
 
+> ⚠️ **ATTENTION!**
+> The Stress Tests for this project were ran on Gatling 3.12.0. Even though there's a newer version, it is adviced to still not modify the test version to ensure proper functionality.
+
 ### Configuration A
 To run configuration A, it is sufficient to first:
 - Run the script `re_build_n_contain.bat`
@@ -22,9 +25,9 @@ To run configuration B, it is sufficient to first:
     - Re-build the maven project
     - And finally, re-deploy the containers on docker
     - How to run:
-```
-./re_build_n_contain.bat
-```
+    ```
+    ./re_build_n_contain.bat
+    ```
 
 - `run_t_test.bat` :
     - Perform a curl request to modulith to /restock the TeaStore
@@ -46,9 +49,9 @@ To run configuration B, it is sufficient to first:
             - Default to: 2
         - The values for these aspects of the test can be altered at the .bat file, but to reproduce results similar to the ones in the report, these should not be altered. 
     - And then, initialize the test with: 
-```
-./run_t_test.bat
-```
+    ```
+    ./run_t_test.bat
+    ```
 
 ## Classes modified during development for different tasks:
 ### Exercise 1.B. Extend methods to confirm order:
