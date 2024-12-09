@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const ProductsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<string[]>([]);
 
   // Fixed useQuery call
@@ -14,6 +16,13 @@ const ProductsPage: React.FC = () => {
 
   const addToCart = (productId: string) => {
     setCart([...cart, productId]);
+  };
+
+  const handleProductClick = (productId: string) => {
+    console.log("Product ID: " + productId);
+    navigate(`/inventory/${productId}`);
+
+    return navigate(`/inventory/${productId}`);
   };
 
   if (isLoading) return <p>Loading products...</p>;
@@ -28,7 +37,7 @@ const ProductsPage: React.FC = () => {
               <ProductCard
                 key={product.id}
                 product={product}
-                addToCart={addToCart}
+                handleProductClick={handleProductClick}
               />
             ))}
           </div>
