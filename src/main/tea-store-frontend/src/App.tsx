@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProductsPage from './pages/ProductsPage';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 const App: React.FC = () => (
   <Router>
@@ -9,6 +10,7 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/" element={<ProductsPage />} />
     </Routes>
+    <Footer />
   </Router>
 );
 

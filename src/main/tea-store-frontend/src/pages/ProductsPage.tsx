@@ -20,15 +20,21 @@ const ProductsPage: React.FC = () => {
   if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Products</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {products.map((product: any) => (
-          <ProductCard key={product.id} product={product} addToCart={addToCart} />
-        ))}
-      </div>
-    </div>
+
+      <div className="p-4 bg-background min-h-screen">
+          <h1 className="text-3xl font-bold text-text mb-6">Available Products</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {products.map((product: any) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                addToCart={addToCart}
+              />
+            ))}
+          </div>
+        </div>
   );
+  
   
 };
 
