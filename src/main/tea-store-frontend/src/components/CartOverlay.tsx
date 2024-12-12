@@ -13,7 +13,7 @@ interface CartOverlayProps {
     image: string;
   }[];
   setCartItems: React.Dispatch<React.SetStateAction<any[]>>;
-  handleQuantityChange: ( id: string, newQuantity: number) => void;
+  handleQuantityChange: ( id: string, currentUnits: number, newUnits: number) => void;
   handleDeletion: (id: string, units: number) => void;
 }
 
@@ -28,13 +28,14 @@ const CartOverlay: React.FC<CartOverlayProps> = ({ cartItems, setCartItems, hand
         console.error('Session ID is missing');
         return;
       }
+      
       try {
         const cart = await getCart(sessionId);
         // Merge fetched cart items with existing cartItems to preserve user-selected quantities
         setCartItems((prevItems) => {
           const updatedCart = cart.map((fetchedItem: any) => {
             const existingItem = prevItems.find((item) => item.id === fetchedItem.id);
-            return existingItem ? { ...fetchedItem, quantity: existingItem.quantity } : fetchedItem;
+            return existingItem ? { ...fetchedItem, units: existingItem.units } : fetchedItem;
           });
           return updatedCart;
         });
@@ -70,10 +71,10 @@ const CartOverlay: React.FC<CartOverlayProps> = ({ cartItems, setCartItems, hand
       <h2 className="text-xl font-bold mb-4">Your Cart</h2>
       {cartItems.length > 0 ? (
         <div className="space-y-4">
-          {cartItems.map((item) => (
+          {cartItems.map((product) => (
             <CartElement
-              key={item.id}
-              product={item}
+              key={product.id}
+              product={product}
               handleQuantityChange={handleQuantityChange}
               handleDeletion={handleDeletion}
             />

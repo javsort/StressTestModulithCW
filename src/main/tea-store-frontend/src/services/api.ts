@@ -93,12 +93,20 @@ export const deleteFromCart = async (sessionId: string, productId: string) => {
 };
 
 export const confirmOrder = async (orderData: object) => {
-  const response = await fetch(`${BASE_URL}/confirm`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(orderData),
-  });
-  if (!response.ok) throw new Error('Failed to confirm order');
+  try {
+    const response = await axios.post(`${BASE_URL}/confirm`, orderData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  return response.json();
+    if (response.status !== 200) {
+      throw new Error('Failed to confirm order');
+    }
+
+    return response.data; // Return the confirmation response
+  } catch (error) {
+    console.error('Error confirming order:', error);
+    throw error;
+  }
 };

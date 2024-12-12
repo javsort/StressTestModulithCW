@@ -1,15 +1,26 @@
 // Updated CheckoutPage.tsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { confirmOrder } from '../services/api';
 
 const CheckoutPage: React.FC = () => {
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const [cartItems, setCartItems] = useState<any[]>([]);
+    const [subtotal, setSubtotal] = useState<string>('0.00');
     const [billingInfo, setBillingInfo] = useState({
         firstName: 'Jon',
         lastName: 'Snow',
         address: 'Winterfell',
     });
+
+    const storedBillingInfo = localStorage.getItem('billingInfo');
+
+    useEffect(() => {
+        if (storedBillingInfo) {
+            setBillingInfo(JSON.parse(storedBillingInfo));
+        }
+    }, [storedBillingInfo]);
 
     const [paymentDetails, setPaymentDetails] = useState({
         cardType: 'Visa',
@@ -18,7 +29,29 @@ const CheckoutPage: React.FC = () => {
         expiryDate: '12/2025',
     });
 
+    const sessionId = localStorage.getItem('sessionId');
+
+    useEffect(() => {
+        // Load cart items passed from CartPage
+        if (location.state?.cartItems) {
+            setCartItems(location.state.cartItems);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        // Calculate subtotal whenever cart items change
+        const calculateSubtotal = () => {
+            const total = cartItems
+                .reduce((sum, item) => sum + item.price * item.units, 0)
+                .toFixed(2);
+            setSubtotal(total);
+        };
+
+        calculateSubtotal();
+    }, [cartItems]);
+
     const handleBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
         const { name, value } = e.target;
         setBillingInfo({ ...billingInfo, [name]: value });
     };
@@ -26,18 +59,40 @@ const CheckoutPage: React.FC = () => {
     const handleStringPayMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setPaymentDetails({ ...paymentDetails, [name]: value });
-    }
+    };
 
     const handlePayMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target;
         setPaymentDetails({ ...paymentDetails, [name]: value });
     };
 
-    const handleSubmit = () => {
-        console.log('Submitting Order:', { billingInfo, paymentDetails });
-        // Add logic to handle order submission
+    const handleSubmit = async () => {
+        
+        localStorage.setItem('billingInfo', JSON.stringify(billingInfo));
 
-        navigate('/order/successful');
+        console.log('Billing info now in local storage:', billingInfo);
+
+        const orderPayload = {
+            cardNumber: paymentDetails.cardNumber,
+            cardOwner: billingInfo.firstName,
+            cardOwnerLastname: billingInfo.lastName,
+            cardOwnerAddress: billingInfo.address,
+            checksum: paymentDetails.checkSum,
+            sessionId,
+            cardType: paymentDetails.cardType,
+            cardExpiry: paymentDetails.expiryDate,
+        };
+
+        try {
+            await confirmOrder(orderPayload);
+            console.log('Order placed successfully:', orderPayload);
+            navigate('/order/successful');
+
+        } catch (error) {
+
+            console.error('Error placing order:', error);
+            alert('Failed to place order. Please try again.');
+        }
     };
 
     return (
@@ -153,17 +208,15 @@ const CheckoutPage: React.FC = () => {
                 <div className="p-4 bg-primary shadow-md rounded-lg">
                     <h2 className="text-xl font-bold text-text mb-4">Order Details</h2>
                     <ul className="space-y-4">
-                        <li className="flex justify-between text-text_subtitle">
-                            <span>Item 1</span>
-                            <span>€10.00</span>
-                        </li>
-                        <li className="flex justify-between text-text_subtitle">
-                            <span>Item 2</span>
-                            <span>€15.00</span>
-                        </li>
+                        {cartItems.map((item) => (
+                            <li key={item.id} className="flex justify-between text-text_subtitle">
+                                <span>{item.name}</span>
+                                <span>€{(item.price * item.units).toFixed(2)}</span>
+                            </li>
+                        ))}
                         <li className="flex justify-between text-text_subtitle font-bold">
                             <span>Total</span>
-                            <span>€25.00</span>
+                            <span>€{subtotal}</span>
                         </li>
                     </ul>
 

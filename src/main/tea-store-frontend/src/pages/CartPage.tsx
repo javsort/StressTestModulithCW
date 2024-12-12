@@ -27,12 +27,26 @@ const CartPage: React.FC = () => {
     fetchCartItems();
   }, [sessionId]);
 
-  const handleQuantityChange = async (id: string, newQuantity: number) => {
+  const handleQuantityChange = async (id: string, currentUnits: number, newUnits: number) => {
+    // First get difference between new and current units
+    const difference = newUnits - currentUnits;
+    console.log('Difference: ', difference);
+
+    // If difference is 0, no need to update
+    if (difference === 0) {
+      return;
+    }
+
+    // If difference is positive, add the difference
+    let toUpdate = difference;
+
+    console.log('Updating units with: ', toUpdate, 'From current: ', currentUnits, 'To new: ', newUnits);
     try {
-      await updateCart(sessionId || '', id, newQuantity);
+      await updateCart(sessionId || '', id, toUpdate);
       const cart = await getCart(sessionId || '');
       setCartItems(cart);
       console.log('Updated cart after units change: ', cart);
+
     } catch (error) {
       console.error('Failed to update units in cart:', error);
     }

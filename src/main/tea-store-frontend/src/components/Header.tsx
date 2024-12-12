@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 import CartOverlay from './CartOverlay';
 import NewsOverlay from './NewsOverlay';
-import placeholder from '../images/front.png';
-import { getCart, updateCart, deleteFromCart } from '../services/api';
+import { getCart, updateCart } from '../services/api';
 
 const Header: React.FC = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -29,16 +28,31 @@ const Header: React.FC = () => {
     fetchCartItems();
   }, [sessionId]);
 
-  const handleQuantityChange = async (id: string, newQuantity: number) => {
-    try {
-      await updateCart(sessionId || '', id, newQuantity);
-      const cart = await getCart(sessionId || '');
-      setCartItems(cart);
-      console.log('Updated cart after units change: ', cart);
-    } catch (error) {
-      console.error('Failed to update units in cart:', error);
-    }
-  };
+  const handleQuantityChange = async (id: string, currentUnits: number, newUnits: number) => {
+      // First get difference between new and current units
+      const difference = newUnits - currentUnits;
+  
+      // If difference is 0, no need to update
+      if (difference === 0) {
+        return;
+      }
+  
+      // If difference is positive, add the difference
+      let toUpdate = difference;
+  
+      // If difference is negative, subtract the difference from current units
+      if (difference < 0) {
+        toUpdate = -currentUnits;
+      }
+      try {
+        await updateCart(sessionId || '', id, toUpdate);
+        const cart = await getCart(sessionId || '');
+        setCartItems(cart);
+        console.log('Updated cart after units change: ', cart);
+      } catch (error) {
+        console.error('Failed to update units in cart:', error);
+      }
+    };
 
   const handleDeletion = async (id: string, units: number) => {
     // Gotta do -{units} to delete the item

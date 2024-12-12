@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const successfulPaymentPage: React.FC = () => {
     const navigate = useNavigate();
-
+    
     return (
         <div className="p-8 bg-background min-h-screen">
             <h1 className="text-3xl font-bold text-text mb-6">Payment Successful!</h1>
