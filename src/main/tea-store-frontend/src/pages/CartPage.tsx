@@ -39,6 +39,12 @@ const CartPage: React.FC = () => {
     console.log('Updated cart: ', updatedCart);
   };
 
+  const handleDeletion = (id: string) => {
+    const updatedCart = cartproducts.filter((product) => product.id !== id);
+    setCartproducts(updatedCart);
+    console.log('Updated cart: ', updatedCart);
+  };
+
   const calculateTotal = () => {
     return cartproducts.reduce((total, product) => total + product.price * product.quantity, 0).toFixed(2);
   };
@@ -59,6 +65,7 @@ const CartPage: React.FC = () => {
             key={product.id}
             product={product}
             handleQuantityChange={handleQuantityChange}
+            handleDelete={handleDeletion}
           />
         ))}
       </div>

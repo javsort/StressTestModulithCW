@@ -6,6 +6,8 @@ import Footer from './components/Footer';
 import ProductSpotlight from './components/ProductSpotlight';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
+import SuccessfulAdditionPage from './pages/SuccessfullyAddedPage';
+import PaymentSuccessfulPage from './pages/PaymentSuccessfulPage';
 
 const App: React.FC = () => (
   <Router>
@@ -16,6 +18,9 @@ const App: React.FC = () => (
       <Route path="/product/:id" element={<ProductSpotlight />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/product/add/successful" element={<SuccessfulAdditionPage />} />
+      <Route path="/order/successful" element={<PaymentSuccessfulPage />} />
+      <Route path="*" element={<h1> Not found </h1>} />
     </Routes>
     <Footer />
   </Router>

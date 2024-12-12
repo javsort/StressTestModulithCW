@@ -11,9 +11,10 @@ interface CartElementProps {
     image: string;
   };
   handleQuantityChange: (id: string, newQuantity: number) => void;
+  handleDelete: (id: string) => void;
 }
 
-const CartElement: React.FC<CartElementProps> = ({ product, handleQuantityChange }) => (
+const CartElement: React.FC<CartElementProps> = ({ product, handleQuantityChange, handleDelete }) => (
   <div className="flex products-center bg-primary shadow-md rounded-lg p-4">
     <img
       src={product.image || placeholder }
@@ -37,9 +38,15 @@ const CartElement: React.FC<CartElementProps> = ({ product, handleQuantityChange
         ))}
       </select>
     </div>
-    <p className="text-secondary_darker font-semibold ml-4">
+    <p className="text-background font-semibold ml-4">
       €{(product.price * product.quantity).toFixed(2)}
     </p>
+    <button
+      onClick={() => handleDelete(product.id)}
+      className="bg-red-500 text-white px-4 py-2 rounded ml-4"
+    >
+      Delete
+    </button>
   </div>
 );
 

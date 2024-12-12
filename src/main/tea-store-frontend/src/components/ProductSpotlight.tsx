@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import placeholder from '../images/front.png';
 
 const ProductSpotlight: React.FC = () => {
+  const navigate = useNavigate();
+
   const location = useLocation();
   const { product } = location.state as { product: any };
 
@@ -11,6 +13,8 @@ const ProductSpotlight: React.FC = () => {
   const handleAddToCart = (product: any) => {
     console.log('Add to cart clicked with quantity: ', quantity, 'product: ', product);
     // FOr logic next
+
+    navigate('/product/add/successful');
   }
 
   const handleChangeInQuantity = (event: React.ChangeEvent<HTMLSelectElement>) => {
