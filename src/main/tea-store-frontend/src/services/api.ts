@@ -1,14 +1,5 @@
 const BASE_URL = 'http://localhost:8081';
 
-export const fetchSeshId = async () => {
-  const response = await fetch(`${BASE_URL}/session`, {
-    credentials: 'include',
-  });
-  if (!response.ok) throw new Error('Failed to fetch session id');
-
-  return response.text();
-};
-
 // First endpoint called -> retrieves the session Id for later requests
 export const fetchProducts = async () => {
   const response = await fetch(`${BASE_URL}/products`, {

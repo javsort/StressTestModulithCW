@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ProductCard from '../components/ProductCard';
-import { fetchProducts, fetchSeshId } from '../services/api';
+import { fetchProducts } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const ProductsPage: React.FC = () => {
