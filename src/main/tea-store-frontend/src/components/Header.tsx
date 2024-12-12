@@ -1,58 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 import CartOverlay from './CartOverlay';
 import NewsOverlay from './NewsOverlay';
 import placeholder from '../images/front.png';
-
-const sampleCartItems = [
-  {
-    id: '1',
-    name: 'Earl Grey (loose)',
-    price: 2.09,
-    quantity: 2,
-    image: placeholder,
-  },
-  {
-    id: '2',
-    name: 'Assam (loose)',
-    price: 5.46,
-    quantity: 1,
-    image: placeholder,
-  },
-];
-
-const sampleNewsItems = [
-  {
-    id: '1',
-    title: 'New Product Launch',
-    date: '2024-12-01',
-    content: 'We are excited to announce the launch of our new tea line!',
-  },
-  {
-    id: '2',
-    title: 'Holiday Sale',
-    date: '2024-12-10',
-    content: 'Enjoy up to 50% off on select items this holiday season!',
-  },
-];
+import { getCart, updateCart, deleteFromCart } from '../services/api';
 
 const Header: React.FC = () => {
-
-  const [cartItems, setCartItems] = useState(sampleCartItems);
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [isNewsOverlayOpen, setIsNewsOverlayOpen] = useState(false);
   const [isCartOverlayOpen, setIsCartOverlayOpen] = useState(false);
+  const sessionId = localStorage.getItem('sessionId');
 
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      if (!sessionId) {
+        console.error('Session ID is missing');
+        return;
+      }
+      try {
+        const cart = await getCart(sessionId);
+        setCartItems(cart);
+      } catch (error) {
+        console.error('Failed to fetch cart items:', error);
+      }
+    };
+
+    fetchCartItems();
+  }, [sessionId]);
+
+  const handleQuantityChange = async (id: string, newQuantity: number) => {
+    try {
+      await updateCart(sessionId || '', id, newQuantity);
+      const cart = await getCart(sessionId || '');
+      setCartItems(cart);
+      console.log('Updated cart after units change: ', cart);
+    } catch (error) {
+      console.error('Failed to update units in cart:', error);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const handleDeletion = async (id: string, units: number) => {
+    // Gotta do -{units} to delete the item
+
+    try {
+      await updateCart(sessionId || '', id, -units);
+      
+      const cart = await getCart(sessionId || '');
+      setCartItems(cart);
+      console.log('Updated cart after deletion: ', cart);
+    } catch (error) {
+      console.error('Failed to delete item from cart:', error);
+    }
   };
 
   return (
@@ -86,7 +85,7 @@ const Header: React.FC = () => {
 
       {isNewsOverlayOpen && (
         <div className="absolute top-16 right-20 w-120 bg-secondary text-background shadow-lg rounded">
-          <NewsOverlay newsItems={sampleNewsItems} />
+          <NewsOverlay newsItems={[]} />
         </div>
       )}
 
@@ -94,8 +93,9 @@ const Header: React.FC = () => {
         <div className="absolute top-16 right-4 w-120 bg-secondary text-background shadow-lg rounded">
           <CartOverlay
             cartItems={cartItems}
+            setCartItems={setCartItems}
             handleQuantityChange={handleQuantityChange}
-            handleDelete={handleDelete}
+            handleDeletion={handleDeletion}
           />
         </div>
       )}

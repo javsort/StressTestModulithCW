@@ -53,33 +53,43 @@ export const addToCart = async (sessionId: string, productId: string, quantity: 
   }
 };
 
+export const getCart = async (sessionId: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/cart/${sessionId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    throw error;
+  }
+}
 
-export const fetchSingleProduct = async (id: string) => {
-  const response = await fetch(`${BASE_URL}/inventory/${id}`);
-  if (!response.ok) throw new Error('Failed to fetch product with id: ' + id);
-
-  return response.json();
+export const updateCart = async (sessionId: string, productId: string, quantity: number) => {
+  console.log('Updating cart with: ', sessionId, productId, quantity);
+  try {
+    const response = await axios.post(`${BASE_URL}/cart/${sessionId}`, {
+      content: {
+        [productId]: quantity,
+      },
+    });
+    return response.data; // List of successfully added items
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    throw error;
+  }
 };
 
-export const fetchCart = async (sessionId: string) => {
-  const response = await fetch(`${BASE_URL}/cart/${sessionId}`, {
-    method: 'GET',
-    credentials: 'include',
-  });
-  if (!response.ok) throw new Error('Failed to fetch cart');
-
-  return response.json();
-};
-
-export const updateCart = async (sessionId: string, payload: object) => {
-  const response = await fetch(`${BASE_URL}/cart/${sessionId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) throw new Error('Failed to update cart');
-
-  return response.json();
+export const deleteFromCart = async (sessionId: string, productId: string) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/cart/${sessionId}`, {
+      content: {
+        [productId]: 0,
+      },
+    });
+    return response.data; // List of successfully added items
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    throw error;
+  }
 };
 
 export const confirmOrder = async (orderData: object) => {

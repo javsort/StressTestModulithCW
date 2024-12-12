@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import placeholder from '../images/front.png';
+import { addToCart } from '../services/api';
 
 const ProductSpotlight: React.FC = () => {
   const navigate = useNavigate();
-
   const location = useLocation();
-  const { product } = location.state as { product: any };
 
+  const { product } = location.state as { product: any };
   const [quantity, setQuantity] = useState<number>(1);
+
+  const sessionId = localStorage.getItem('sessionId');
 
   const handleAddToCart = (product: any) => {
     console.log('Add to cart clicked with quantity: ', quantity, 'product: ', product);
-    // FOr logic next
+    if(!sessionId) {
+      console.error('Session ID is missing');
+      return;
+    }
 
-    navigate('/product/add/successful');
+    try {
+      const addedItems = addToCart(sessionId, product.id, quantity);
+      console.log('Added items to cart: ', addedItems);
+      navigate('/product/add/successful');
+
+    } catch (error){
+      console.error('Failed to add to cart:', error);
+      alert('An error occurred while adding to the cart. Please try again.');
+    }
+
   }
 
   const handleChangeInQuantity = (event: React.ChangeEvent<HTMLSelectElement>) => {
