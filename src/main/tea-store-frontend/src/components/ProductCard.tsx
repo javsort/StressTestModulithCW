@@ -10,7 +10,7 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
-  handleProductClick: (productId: string) => void;
+  handleProductClick: (product: Product) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, handleProductClick }) => (
@@ -20,7 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, handleProductClick }
     <p className="text-secondary_darker font-semibold mt-2">€{product.price.toFixed(2)}</p>
     <button
       className="mt-4 bg-secondary text-background px-4 py-2 rounded hover:bg-accent"
-      onClick={() => handleProductClick(product.id)}
+      onClick={() => handleProductClick(product)}
     >
       See Details
     </button>

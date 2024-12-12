@@ -1,8 +1,28 @@
 const BASE_URL = 'http://localhost:8081';
 
+export const fetchSeshId = async () => {
+  const response = await fetch(`${BASE_URL}/session`, {
+    credentials: 'include',
+  });
+  if (!response.ok) throw new Error('Failed to fetch session id');
+
+  return response.text();
+};
+
+// First endpoint called -> retrieves the session Id for later requests
 export const fetchProducts = async () => {
-  const response = await fetch(`${BASE_URL}/products`);
+  const response = await fetch(`${BASE_URL}/products`, {
+    credentials: 'include'
+  });
   if (!response.ok) throw new Error('Failed to fetch products');
+
+  // Get session id from cookies and store locally
+  const sessionId = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('JSESSIONID'))
+    ?.split('=')[1];
+
+  if (sessionId) localStorage.setItem('sessionId', sessionId);
 
   return response.json();
 };
