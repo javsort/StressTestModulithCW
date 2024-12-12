@@ -1,0 +1,1623 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "T2 Modulith API",
+      "description": "API of the T2-Project's modulith implementation.",
+      "version": "0.0.1-SNAPSHOT"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8081",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/cart": {
+        "get": {
+          "tags": [
+            "cart-item-entity-controller"
+          ],
+          "description": "get-cartitem",
+          "operationId": "getCollectionResource-cartitem-get_1",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Zero-based page index (0..N)",
+              "required": false,
+              "schema": {
+                "minimum": 0,
+                "type": "integer",
+                "default": 0
+              }
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "description": "The size of the page to be returned",
+              "required": false,
+              "schema": {
+                "minimum": 1,
+                "type": "integer",
+                "default": 20
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+              "required": false,
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagedModelEntityModelCartItem"
+                  }
+                },
+                "application/x-spring-data-compact+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagedModelEntityModelCartItem"
+                  }
+                },
+                "text/uri-list": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "cart-item-entity-controller"
+          ],
+          "description": "create-cartitem",
+          "operationId": "postCollectionResource-cartitem-post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartItemRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelCartItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/cart/search/deleteByIdIn": {
+        "get": {
+          "tags": [
+            "cart-item-search-controller"
+          ],
+          "operationId": "executeSearch-cartitem-get",
+          "parameters": [
+            {
+              "name": "ids",
+              "in": "query",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            }
+          }
+        }
+      },
+      "/cart/{id}": {
+        "get": {
+          "tags": [
+            "cart-item-entity-controller"
+          ],
+          "description": "get-cartitem",
+          "operationId": "getItemResource-cartitem-get",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelCartItem"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "cart-item-entity-controller"
+          ],
+          "description": "update-cartitem",
+          "operationId": "putItemResource-cartitem-put",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartItemRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelCartItem"
+                  }
+                }
+              }
+            },
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelCartItem"
+                  }
+                }
+              }
+            },
+            "204": {
+              "description": "No Content"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "cart-item-entity-controller"
+          ],
+          "description": "delete-cartitem",
+          "operationId": "deleteItemResource-cartitem-delete",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "404": {
+              "description": "Not Found"
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "cart-item-entity-controller"
+          ],
+          "description": "patch-cartitem",
+          "operationId": "patchItemResource-cartitem-patch",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartItemRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelCartItem"
+                  }
+                }
+              }
+            },
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/inventory": {
+        "get": {
+          "tags": [
+            "inventory-item-entity-controller"
+          ],
+          "description": "get-inventoryitem",
+          "operationId": "getCollectionResource-inventoryitem-get_1",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Zero-based page index (0..N)",
+              "required": false,
+              "schema": {
+                "minimum": 0,
+                "type": "integer",
+                "default": 0
+              }
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "description": "The size of the page to be returned",
+              "required": false,
+              "schema": {
+                "minimum": 1,
+                "type": "integer",
+                "default": 20
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+              "required": false,
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagedModelEntityModelInventoryItem"
+                  }
+                },
+                "application/x-spring-data-compact+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PagedModelEntityModelInventoryItem"
+                  }
+                },
+                "text/uri-list": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "inventory-item-entity-controller"
+          ],
+          "description": "create-inventoryitem",
+          "operationId": "postCollectionResource-inventoryitem-post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryItemRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelInventoryItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/inventory/{id}": {
+        "get": {
+          "tags": [
+            "inventory-item-entity-controller"
+          ],
+          "description": "get-inventoryitem",
+          "operationId": "getItemResource-inventoryitem-get",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelInventoryItem"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "inventory-item-entity-controller"
+          ],
+          "description": "update-inventoryitem",
+          "operationId": "putItemResource-inventoryitem-put",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryItemRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelInventoryItem"
+                  }
+                }
+              }
+            },
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelInventoryItem"
+                  }
+                }
+              }
+            },
+            "204": {
+              "description": "No Content"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "inventory-item-entity-controller"
+          ],
+          "description": "delete-inventoryitem",
+          "operationId": "deleteItemResource-inventoryitem-delete",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "404": {
+              "description": "Not Found"
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "inventory-item-entity-controller"
+          ],
+          "description": "patch-inventoryitem",
+          "operationId": "patchItemResource-inventoryitem-patch",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryItemRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EntityModelInventoryItem"
+                  }
+                }
+              }
+            },
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/profile": {
+        "get": {
+          "tags": [
+            "profile-controller"
+          ],
+          "operationId": "listAllFormsOfMetadata_1",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RepresentationModelObject"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/profile/cart": {
+        "get": {
+          "tags": [
+            "profile-controller"
+          ],
+          "operationId": "descriptor_1_1_1",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                "application/alps+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                "application/schema+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/JsonSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/profile/inventory": {
+        "get": {
+          "tags": [
+            "profile-controller"
+          ],
+          "operationId": "descriptor_1_1_2",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                "application/alps+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                "application/schema+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/JsonSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/confirm": {
+        "post": {
+          "tags": [
+            "ui-backend-controller"
+          ],
+          "summary": "Order all items in the cart",
+          "description": "Order all items in the cart",
+          "operationId": "confirmOrder",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "500": {
+              "description": "Order could not be placed",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Order for items is placed"
+            }
+          }
+        }
+      },
+      "/cart/{sessionId}": {
+        "get": {
+          "tags": [
+            "ui-backend-controller"
+          ],
+          "summary": "List all items in cart",
+          "operationId": "getCart",
+          "parameters": [
+            {
+              "name": "sessionId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "ui-backend-controller"
+          ],
+          "summary": "Update items in cart",
+          "operationId": "updateCart",
+          "parameters": [
+            {
+              "name": "sessionId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCartRequest"
+                },
+                "example": {
+                  "content": {
+                    "product-id": 3
+                  }
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "500": {
+              "description": "Cart could not be updated",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Cart updated",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/unblock-routes": {
+        "post": {
+          "tags": [
+            "Block"
+          ],
+          "summary": "Unblock all requests",
+          "description": "Lifts the block for any route",
+          "operationId": "unblockRoutes",
+          "responses": {
+            "200": {
+              "description": "Successfully lifted the route block"
+            }
+          }
+        }
+      },
+      "/autoscaling/require-memory/{memory}-percent": {
+        "post": {
+          "tags": [
+            "Memory"
+          ],
+          "summary": "Ensures that consistently at least {memory}% is used",
+          "description": "{memory} must be a human percentage ( {memory} ∈ (-∞, 100), i.e. 50.2 = 50.2%), 0 disables the leak, negative values clear the leak.",
+          "operationId": "requireMemoryFromHumanPercentage",
+          "parameters": [
+            {
+              "name": "memory",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "{memory} \u003E= 100.0",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Successfully demanded a memory usage of at least {memory}%",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/require-memory/ratio-{memory}": {
+        "post": {
+          "tags": [
+            "Memory"
+          ],
+          "summary": "Ensures that consistently at least (100 * {memory})% memory is used",
+          "description": "{memory} must be a mathematical ratio ( {memory} ∈ (-∞, 1.0), i.e. 0.052 = 5.2% ), 0 disables the leak, negative values clear the leak.",
+          "operationId": "requireMemory",
+          "parameters": [
+            {
+              "name": "memory",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "{memory} \u003E= 1.0",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Successfully demanded a memory usage of at least {memory}%",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/require-cpu": {
+        "post": {
+          "tags": [
+            "CPU"
+          ],
+          "summary": "Ensures that consistently at least {cpu}% is used",
+          "description": "time unit = values known to https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoUnit.html#valueOf(java.lang.String), case insensitive, default seconds.\nCPU percentage defines the percentage of CPU to use at all times, for all cores combined.\n{cpu percentage} must be a mathematical ratio ( {cpu percentage} ∈ (-∞, 1.0 * {number of available cores}), i.e. 7.5 = 750.5% (full load for 7 cores and a half)).\n{cpu percentage} \u003C= 0 disables the CPU waste.\nThe mechanism works by using 100% per core for an interval of length {requested CPU percentage} * {interval length} / {number of cores} periodically.\nInterval length decides how long the interval is in {time unit}. Default 10.",
+          "operationId": "requireCPU",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CPUUsageRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successfully demanded a CPU usage of at least {cpu}%",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CPUUsage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/require-cpu-from-humans": {
+        "post": {
+          "tags": [
+            "CPU"
+          ],
+          "summary": "Ensures that consistently at least {cpu}% is used",
+          "description": "time unit = values known to https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoUnit.html#valueOf(java.lang.String), case insensitive, default seconds.\nCPU percentage defines the percentage of CPU to use at all times, for all cores combined.\n{cpu percentage} must be a human percentage ( {cpu percentage} ∈ (-∞, 100.0 * {number of available cores}), i.e. 750.5 = 750.5% (full load for 7 cores and a half)).\n{cpu percentage} \u003C= 0 disables the CPU waste.\nThe mechanism works by using 100% per core for an interval of length {requested CPU percentage} * {interval length} / {number of cores} periodically.\nInterval length decides how long the interval is in {time unit}. Default 10.",
+          "operationId": "requireCPUFromHumanPercent",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CPUUsageRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successfully demanded a CPU usage of at least {cpu}%",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CPUUsage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/remove-cpu-usage-requirements": {
+        "post": {
+          "tags": [
+            "CPU"
+          ],
+          "summary": "Removes the requirement to use a minimum of CPU at all times",
+          "operationId": "removeCPURequirements",
+          "responses": {
+            "200": {
+              "description": "Successfully disabled the minimum usage requirements for the CPU",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CPUUsage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/disable-memory-leak": {
+        "post": {
+          "tags": [
+            "Memory"
+          ],
+          "summary": "Disable adding more unneeded memory",
+          "description": "Needed when wanting to keep an already existing memory leak without increasing the leaked amount of memory once the GC frees some other memory.",
+          "operationId": "disableMemoryLeak",
+          "responses": {
+            "200": {
+              "description": "Successfully disabled the memory leak",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/clear-memory-leak": {
+        "post": {
+          "tags": [
+            "Memory"
+          ],
+          "summary": "Clear the memory leak if it exists",
+          "description": "Let's the service return to its normal memory usage.",
+          "operationId": "clearMemoryLeak",
+          "responses": {
+            "200": {
+              "description": "Successfully cleared the memory leak",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/block-routes": {
+        "post": {
+          "tags": [
+            "Block"
+          ],
+          "summary": "Block all subsequent requests",
+          "description": "deterministically produces a SLO for all subsequent requests outside of \"/autoscaling/*\" ",
+          "operationId": "blockRoutes",
+          "responses": {
+            "200": {
+              "description": "Successfully blocked all further routes"
+            }
+          }
+        }
+      },
+      "/session": {
+        "get": {
+          "tags": [
+            "ui-backend-controller"
+          ],
+          "summary": "Get session id",
+          "operationId": "getSessionId",
+          "responses": {
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/restock": {
+        "get": {
+          "tags": [
+            "data-generator-controller"
+          ],
+          "summary": "Restock units of the store's products",
+          "operationId": "restock",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/products": {
+        "get": {
+          "tags": [
+            "ui-backend-controller"
+          ],
+          "summary": "List all available products",
+          "operationId": "getAllProducts",
+          "responses": {
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/hal+json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/generate": {
+        "get": {
+          "tags": [
+            "data-generator-controller"
+          ],
+          "summary": "Populate the store with new products",
+          "operationId": "generateData",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/autoscaling/memory-info": {
+        "get": {
+          "tags": [
+            "Memory"
+          ],
+          "summary": "Show current memory information",
+          "description": "Returns how many bytes are currently used, free, and in total vailable.",
+          "operationId": "getMemoryInformation",
+          "responses": {
+            "200": {
+              "description": "Successfully returned the current memory information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MemoryInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/autoscaling/cpu-info": {
+        "get": {
+          "tags": [
+            "CPU"
+          ],
+          "summary": "Show current CPU information",
+          "description": "Returns how many cores are vailable, what interval is used and .",
+          "operationId": "getCPUInformation",
+          "responses": {
+            "200": {
+              "description": "Successfully returned the current CPU information",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CPUUsage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AbstractJsonSchemaPropertyObject": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "readOnly": {
+              "type": "boolean"
+            }
+          }
+        },
+        "Item": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/AbstractJsonSchemaPropertyObject"
+              }
+            },
+            "requiredProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "JsonSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/AbstractJsonSchemaPropertyObject"
+              }
+            },
+            "requiredProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "definitions": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/Item"
+              }
+            },
+            "type": {
+              "type": "string"
+            },
+            "$schema": {
+              "type": "string"
+            }
+          }
+        },
+        "Links": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/components/schemas/Link"
+          }
+        },
+        "RepresentationModelObject": {
+          "type": "object",
+          "properties": {
+            "_links": {
+              "$ref": "#/components/schemas/Links"
+            }
+          }
+        },
+        "EntityModelCartItem": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "creationDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "_links": {
+              "$ref": "#/components/schemas/Links"
+            }
+          }
+        },
+        "PageMetadata": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "totalElements": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "totalPages": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "number": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "PagedModelEntityModelCartItem": {
+          "type": "object",
+          "properties": {
+            "_embedded": {
+              "type": "object",
+              "properties": {
+                "cart": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntityModelCartItem"
+                  }
+                }
+              }
+            },
+            "_links": {
+              "$ref": "#/components/schemas/Links"
+            },
+            "page": {
+              "$ref": "#/components/schemas/PageMetadata"
+            }
+          }
+        },
+        "EntityModelInventoryItem": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "units": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "price": {
+              "type": "number",
+              "format": "double"
+            },
+            "reservations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Reservation"
+              }
+            },
+            "_links": {
+              "$ref": "#/components/schemas/Links"
+            }
+          }
+        },
+        "InventoryItem": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "units": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "price": {
+              "type": "number",
+              "format": "double"
+            },
+            "reservations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Reservation"
+              }
+            }
+          }
+        },
+        "PagedModelEntityModelInventoryItem": {
+          "type": "object",
+          "properties": {
+            "_embedded": {
+              "type": "object",
+              "properties": {
+                "inventory": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntityModelInventoryItem"
+                  }
+                }
+              }
+            },
+            "_links": {
+              "$ref": "#/components/schemas/Links"
+            },
+            "page": {
+              "$ref": "#/components/schemas/PageMetadata"
+            }
+          }
+        },
+        "Reservation": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "creationDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "units": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "userId": {
+              "type": "string"
+            },
+            "item": {
+              "$ref": "#/components/schemas/InventoryItem"
+            }
+          }
+        },
+        "CartItemRequestBody": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "content": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "creationDate": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "InventoryItemRequestBody": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "units": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "price": {
+              "type": "number",
+              "format": "double"
+            },
+            "reservations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Reservation"
+              }
+            }
+          }
+        },
+        "OrderRequest": {
+          "type": "object",
+          "properties": {
+            "cardNumber": {
+              "type": "string"
+            },
+            "cardOwner": {
+              "type": "string"
+            },
+            "checksum": {
+              "type": "string"
+            },
+            "sessionId": {
+              "type": "string"
+            },
+            "cardType": {
+              "type": "string"
+            },
+            "cardExpiry": {
+              "type": "string"
+            },
+            "cardOwnerLastname": {
+              "type": "string"
+            },
+            "cardOwnerAddress": {
+              "type": "string"
+            }
+          }
+        },
+        "UpdateCartRequest": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        },
+        "Product": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "units": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "price": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "MemoryInfo": {
+          "type": "object",
+          "properties": {
+            "used": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "free": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "total": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "max": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "usedRatio": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "CPUUsageRequest": {
+          "type": "object",
+          "properties": {
+            "timeUnit": {
+              "type": "string"
+            },
+            "intervalLength": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "cpuPercentage": {
+              "type": "number",
+              "format": "double"
+            },
+            "errorHandler": {
+              "type": "object"
+            }
+          }
+        },
+        "CPUUsage": {
+          "type": "object",
+          "properties": {
+            "interval": {
+              "type": "object",
+              "properties": {
+                "seconds": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "zero": {
+                  "type": "boolean"
+                },
+                "nano": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "negative": {
+                  "type": "boolean"
+                },
+                "units": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "durationEstimated": {
+                        "type": "boolean"
+                      },
+                      "timeBased": {
+                        "type": "boolean"
+                      },
+                      "dateBased": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "minCPUUsagePerCore": {
+              "type": "number",
+              "format": "double"
+            },
+            "minCPUUsageTotal": {
+              "type": "number",
+              "format": "double"
+            },
+            "availableCores": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "Link": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            },
+            "hreflang": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "deprecation": {
+              "type": "string"
+            },
+            "profile": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "templated": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
