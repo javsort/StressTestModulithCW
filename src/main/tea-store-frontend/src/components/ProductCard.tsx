@@ -1,4 +1,5 @@
 import React from 'react';
+import placeholder from '../images/front.png';
 
 interface Product {
   id: string;
@@ -6,6 +7,7 @@ interface Product {
   description: string;
   price: number;
   units: number;
+  image: string;
 }
 
 interface ProductCardProps {
@@ -15,6 +17,11 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, handleProductClick }) => (
   <div className="bg-primary shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow">
+    <img 
+      src={product.image || placeholder} 
+      alt={`${product.name} image`} 
+      className="w-full h-48 object-cover" 
+    />
     <h3 className="text-lg font-bold text-text">{product.name}</h3>
     <p className="text-sm text-text_subtitle">{product.description}</p>
     <p className="text-secondary_darker font-semibold mt-2">€{product.price.toFixed(2)}</p>

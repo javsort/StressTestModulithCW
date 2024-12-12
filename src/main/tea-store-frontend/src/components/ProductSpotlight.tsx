@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const ProductSpotlight: React.FC = () => {
   const location = useLocation();
   const { product } = location.state as { product: any };
 
+  const [quantity, setQuantity] = useState<number>(1);
+
   const handleAddToCart = (product: any) => {
-    console.log('Add to cart clicked');
+    console.log('Add to cart clicked with quantity: ', quantity, 'product: ', product);
+  }
+
+  const handleChangeInQuantity = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setQuantity(parseInt(event.target.value, 10));
+    console.log('Quantity changed to: ', event.target.value);
   }
 
   return (
@@ -19,6 +26,24 @@ const ProductSpotlight: React.FC = () => {
       <p className="text-secondary_darker font-semibold mt-2">
           Price: €{product.price.toFixed(2)}
       </p>
+
+      {/* Quantity selector */}
+        <div className="mt-4">
+        <label htmlFor="quantity" className="text-text_subtitle">Select Quantity: </label>
+        <select
+          id="quantity"
+          value={quantity}
+          onChange={handleChangeInQuantity}
+          className="bg-secondary text-background px-4 py-2 rounded hover:underline"
+        >
+          {[...Array(product.units).keys()].map((num) => (
+            <option key={num + 1} value={num + 1}>
+              {num + 1}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <button
         className="mt-4 bg-secondary text-background px-4 py-2 rounded hover:bg-accent"
         onClick={() => handleAddToCart(product)}
