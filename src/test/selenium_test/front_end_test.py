@@ -10,6 +10,7 @@ FRONT_END_URL = "http://localhost:5173"
 
 def performUiTest(
     tea_array: dict,
+    think_time: int
 ):
     # Initialize the WebDriver
     driver = webdriver.Chrome()  # Replace with the path to your ChromeDriver if necessary
@@ -23,12 +24,20 @@ def performUiTest(
         news_close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='news-button']")))
         news_close_button.click()
 
+        time.sleep(think_time)
+
         # Select the teas -> a.2) Select the teas to test with and add them to the cart
         for x in tea_array:
+            print(f"Selecting tea '{x['tea_name']}'...")
+    
+            time.sleep(think_time)
+    
             tea_card = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, f"div[data-testid='{x['card_check']}']")))
+            driver.execute_script("arguments[0].scrollIntoView();", tea_card)
             tea_card.find_element(By.CSS_SELECTOR, "button").click()
 
             print(f"Tea '{x['tea_name']}' selected")
+            time.sleep(think_time)
 
             # Add 2 units of the first tea
             quantity_dropdown = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "select[data-testid='product-quantity']")))
@@ -51,12 +60,15 @@ def performUiTest(
 
         checkout_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='checkout-button']")))
         checkout_button.click()
+        
+        time.sleep(think_time)
 
         cart_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='cart-button']")))
         cart_button.click()
 
         # Once in cart, verify cart properties -> b) Verify the cart properties
         for x in tea_array:
+            time.sleep(think_time)
             print(f"Looking for tea '{x['tea_name']}' in cart for variable: {x['units_check']}")
             cart_tea_quantity_dropdown = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, f"select[data-testid='{x['units_check']}']")))
 
@@ -71,6 +83,7 @@ def performUiTest(
         # Proceed to checkout
         checkout_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='proceed-to-checkout']")))
         checkout_button.click()
+        time.sleep(think_time)
 
         # Fill in details for checkout -> c) Fill in the shipping and payment details and place the order
 
@@ -108,12 +121,14 @@ def performUiTest(
         print("Payment details filled in \nPlacing order...")
 
         # Confirm order
+        time.sleep(think_time)
         place_order_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-testid='place-order']")))
         place_order_button.click()
 
         print("Order placed successfully \nAsserting order success...")
 
         # Verify order success
+        time.sleep(think_time)
         order_confirmation = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "p[data-testid='successful-payment']"))).text
         assert "Thank you for your purchase! You can go back to the shop now." in order_confirmation, "Order confirmation failed"
 
@@ -141,6 +156,8 @@ def main():
         }
     ]
 
+    think_time = 1
+
     # Wait for 500ms
     time.sleep(0.5)
 
@@ -150,7 +167,7 @@ def main():
         print(json.dumps(x, indent=4))
 
     # Run the test after setting up the variables
-    performUiTest(tea_array)
+    performUiTest(tea_array, think_time)
 
 if __name__ == "__main__":
     main()
