@@ -4,6 +4,7 @@ import CartElement from './CartElement';
 import { useNavigate } from 'react-router-dom';
 import { getCart } from '../services/api';
 
+// CartOverlay component -> Displays the cart items in a sidebar
 interface CartOverlayProps {
   cartItems: {
     id: string;
@@ -17,11 +18,18 @@ interface CartOverlayProps {
   handleDeletion: (id: string, units: number) => void;
 }
 
+// CartOverlay component -> Displays the cart items in a sidebar
 const CartOverlay: React.FC<CartOverlayProps> = ({ cartItems, setCartItems, handleQuantityChange, handleDeletion }) => {
+  // Navigate to enable routing
   const navigate = useNavigate();
+
+  // Get session ID
   const sessionId = localStorage.getItem('sessionId');
+
+  // Subtotal state for the cart
   const [subtotal, setSubtotal] = useState<string>('0.00');
 
+  // Fetch cart items
   useEffect(() => {
     const fetchCartItems = async () => {
       if (!sessionId) {
@@ -47,6 +55,7 @@ const CartOverlay: React.FC<CartOverlayProps> = ({ cartItems, setCartItems, hand
     fetchCartItems();
   }, [sessionId, setCartItems]);
 
+  // Calculate subtotal
   useEffect(() => {
     const calculateTotal = () => {
       const total = cartItems
@@ -61,6 +70,7 @@ const CartOverlay: React.FC<CartOverlayProps> = ({ cartItems, setCartItems, hand
     calculateTotal();
   }, [cartItems]);
 
+  // Handle checkout button click
   const handleCheckout = () => {
     console.log('Going to Cart Page with: ', cartItems);
     navigate('/cart', { state: { cartItems } });
@@ -84,6 +94,8 @@ const CartOverlay: React.FC<CartOverlayProps> = ({ cartItems, setCartItems, hand
             <button
               onClick={handleCheckout}
               className="w-full mt-2 bg-accent text-background px-4 py-2 rounded hover:bg-accent-dark"
+              // Add data-testid attribute with value 'checkout-button'
+              data-testid="checkout-button"
             >
               Go to Cart
             </button>

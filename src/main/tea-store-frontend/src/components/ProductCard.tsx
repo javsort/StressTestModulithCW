@@ -1,6 +1,7 @@
 import React from 'react';
 import placeholder from '../images/front.png';
 
+// Product interface
 interface Product {
   id: string;
   name: string;
@@ -15,9 +16,15 @@ interface ProductCardProps {
   handleProductClick: (product: Product) => void;
 }
 
+// ProductCard component -> Displays a single product card
 const ProductCard: React.FC<ProductCardProps> = ({ product, handleProductClick }) => (
-  <div className="bg-primary shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow">
+  <div 
+    className="bg-primary shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow"
+    // Add data-testid attribute for testing
+    data-testid={`product-card-${product.name.replace(/ /g, '-')}`}
+  >
     <img 
+      // Add alt attribute with value `${product.name} image`. Since there's no current images, use Tea
       src={product.image || placeholder} 
       alt={`${product.name} image`} 
       className="w-full h-48 object-cover" 

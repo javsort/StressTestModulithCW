@@ -15,11 +15,12 @@ interface CartElementProps {
   handleDeletion: (id: string, units: number) => void;
 }
 
+// CartElement component -> Displays a single cart item
 const CartElement: React.FC<CartElementProps> = ({ product, handleQuantityChange, handleDeletion }) => {
-  
+  // Create a range of units from 0 to product.units + 10
   const range = Array.from({ length: product.units + 11 }, (_, i) => i);
   
-  
+  // Return the JSX for the cart item
   return (
     <div className="flex products-center bg-primary shadow-md rounded-lg p-4">
       <img
@@ -36,6 +37,8 @@ const CartElement: React.FC<CartElementProps> = ({ product, handleQuantityChange
           value={product.units}
           onChange={(e) => handleQuantityChange(product.id, product.units, parseInt(e.target.value, 10))}
           className="bg-secondary text-background px-4 py-2 rounded mt-1"
+          // Add data-testid attribute with value `cart-item-${product.name.replace(/ /g, '-')}-units`
+          data-testid={`cart-item-${product.name.replace(/ /g, '-')}-units`}
         >
           {range.map((num) => (
             <option key={num} value={num}>

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// Footer component
 const Footer: React.FC = () => (
+  // Footer with links to documentation, about us and GitHub repository
   <header className="bg-secondary text-background p-4 flex justify-between items-center">
     <nav>
       <Link to="https://t2-documentation.readthedocs.io/en/latest/index.html" className="text-background px-4 hover:underline">

@@ -10,9 +10,10 @@ interface NewsOverlayProps {
   }[];
 }
 
-
-
+// NewsOverlay component -> Displays the latest news & announcements
 const NewsOverlay: React.FC<NewsOverlayProps> = ({  }) => {
+
+  // Fake news items
   const newsItems = [
     {
       id: '1',
@@ -50,6 +51,7 @@ const NewsOverlay: React.FC<NewsOverlayProps> = ({  }) => {
         </ul>
       ) : (
         <p className="text-text_subtitle">No news available.</p>
+        
       )}
     </div>
   );

@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
+// ProductsPage page -> Landing page for the user
 const ProductsPage: React.FC = () => {
+  // Navigate to the product Spotlight page
   const navigate = useNavigate();
-  const [cart, setCart] = useState<string[]>([]);
 
-  // Fixed useQuery call
+  // Fixed useQuery call to fetch products
   const { data: products, isLoading, error } = useQuery({
     queryKey: ['products'],
     queryFn: fetchProducts,
+
   });
 
   // Get the session id
@@ -21,11 +23,7 @@ const ProductsPage: React.FC = () => {
     console.log("Session ID: ", sessionId);
   }
 
-
-  const addToCart = (productId: string) => {
-    setCart([...cart, productId]);
-  };
-
+  // Handle the product click -> Navigate to the product spotlight page
   const handleProductClick = (product: any) => {
     console.log("Product: ", product);
     navigate(`/product/${product.id}`, { state: { product } });
@@ -34,6 +32,7 @@ const ProductsPage: React.FC = () => {
   if (isLoading) return <p>Loading products...</p>;
   if (error instanceof Error) return <p>Error: {error.message}</p>;
 
+  // Return the products page
   return (
 
       <div className="p-4 bg-background min-h-screen">

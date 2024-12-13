@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
    // Scan all files in src
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],

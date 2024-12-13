@@ -3,37 +3,50 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import placeholder from '../images/front.png';
 import { addToCart } from '../services/api';
 
+// ProductSpotlight component -> Displays a single product in detail
 const ProductSpotlight: React.FC = () => {
+  // Navigate to enable routing after adding to cart
   const navigate = useNavigate();
-  const location = useLocation();
 
+  // Get product to display from location state
+  const location = useLocation();
   const { product } = location.state as { product: any };
+  
+  // Quantity state -> Default to 1
   const [quantity, setQuantity] = useState<number>(1);
 
+  // Get session ID
   const sessionId = localStorage.getItem('sessionId');
 
+  // Handle add to cart button click
   const handleAddToCart = (product: any) => {
     console.log('Add to cart clicked with quantity: ', quantity, 'product: ', product);
     if(!sessionId) {
       console.error('Session ID is missing');
       return;
+    
     }
 
     try {
       const addedItems = addToCart(sessionId, product.id, quantity);
       console.log('Added items to cart: ', addedItems);
+
+      // Navigate to successful page
       navigate('/product/add/successful');
 
     } catch (error){
       console.error('Failed to add to cart:', error);
       alert('An error occurred while adding to the cart. Please try again.');
+
     }
 
   }
 
+  // Handle change in quantity
   const handleChangeInQuantity = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setQuantity(parseInt(event.target.value, 10));
     console.log('Quantity changed to: ', event.target.value);
+
   }
 
   return (
@@ -62,6 +75,8 @@ const ProductSpotlight: React.FC = () => {
           <div className="mt-4">
           <label htmlFor="quantity" className="text-text_subtitle">Select Quantity: </label>
           <select
+            // Add data-testid attribute with value 'product-quantity'
+            data-testid="product-quantity"
             id="quantity"
             value={quantity}
             onChange={handleChangeInQuantity}
@@ -76,6 +91,8 @@ const ProductSpotlight: React.FC = () => {
         </div>
 
         <button
+          // Add data-testid attribute with value 'add-to-cart'
+          data-testid="add-to-cart"
           className="mt-4 bg-secondary text-background px-4 py-2 rounded hover:bg-accent"
           onClick={() => handleAddToCart(product)}
         >

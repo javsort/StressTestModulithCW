@@ -3,25 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { confirmOrder } from '../services/api';
 
+// The CheckoutPage component is responsible for rendering the checkout page.
 const CheckoutPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [subtotal, setSubtotal] = useState<string>('0.00');
     const [billingInfo, setBillingInfo] = useState({
+        // Default billing info
         firstName: 'Jon',
         lastName: 'Snow',
         address: 'Winterfell',
     });
 
+    // Load billing info from local storage if available
     const storedBillingInfo = localStorage.getItem('billingInfo');
-
     useEffect(() => {
         if (storedBillingInfo) {
             setBillingInfo(JSON.parse(storedBillingInfo));
         }
     }, [storedBillingInfo]);
 
+    // Default payment details
     const [paymentDetails, setPaymentDetails] = useState({
         cardType: 'Visa',
         cardNumber: '314159265359',
@@ -29,49 +32,57 @@ const CheckoutPage: React.FC = () => {
         expiryDate: '12/2025',
     });
 
+    // Load session ID from local storage
     const sessionId = localStorage.getItem('sessionId');
 
+    // Load cart items passed from CartPage
     useEffect(() => {
-        // Load cart items passed from CartPage
         if (location.state?.cartItems) {
             setCartItems(location.state.cartItems);
         }
+        
     }, [location.state]);
 
+    // Calculate subtotal whenever cart items change
     useEffect(() => {
-        // Calculate subtotal whenever cart items change
         const calculateSubtotal = () => {
             const total = cartItems
                 .reduce((sum, item) => sum + item.price * item.units, 0)
                 .toFixed(2);
             setSubtotal(total);
+
         };
 
         calculateSubtotal();
     }, [cartItems]);
 
+    // Update billing info on change
     const handleBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         const { name, value } = e.target;
         setBillingInfo({ ...billingInfo, [name]: value });
     };
 
+    // Update payment details on change
     const handleStringPayMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setPaymentDetails({ ...paymentDetails, [name]: value });
     };
 
+    // Update payment details on change
     const handlePayMethodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target;
         setPaymentDetails({ ...paymentDetails, [name]: value });
     };
 
+    // Handle order submission
     const handleSubmit = async () => {
-        
+        // Store billing info in local storage for future use
         localStorage.setItem('billingInfo', JSON.stringify(billingInfo));
 
         console.log('Billing info now in local storage:', billingInfo);
 
+        // Prepare order payload
         const orderPayload = {
             cardNumber: paymentDetails.cardNumber,
             cardOwner: billingInfo.firstName,
@@ -83,9 +94,12 @@ const CheckoutPage: React.FC = () => {
             cardExpiry: paymentDetails.expiryDate,
         };
 
+        // Confirm order
         try {
             await confirmOrder(orderPayload);
             console.log('Order placed successfully:', orderPayload);
+
+            // Clear cart and navigate to successful order page
             navigate('/order/successful');
 
         } catch (error) {
@@ -115,6 +129,8 @@ const CheckoutPage: React.FC = () => {
                                     value={billingInfo.firstName}
                                     onChange={handleBillingChange}
                                     className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                    // Add data-testid attribute with value 'user-first-name'
+                                    data-testid="user-first-name"
                                 />
                             </div>
                             <div>
@@ -126,6 +142,8 @@ const CheckoutPage: React.FC = () => {
                                     value={billingInfo.lastName}
                                     onChange={handleBillingChange}
                                     className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                    // Add data-testid attribute with value 'user-last-name'
+                                    data-testid="user-last-name"
                                 />
                             </div>
                             <div>
@@ -137,6 +155,8 @@ const CheckoutPage: React.FC = () => {
                                     value={billingInfo.address}
                                     onChange={handleBillingChange}
                                     className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                    // Add data-testid attribute with value 'user-address'
+                                    data-testid="user-address"
                                 />
                             </div>
                         </form>
@@ -155,6 +175,8 @@ const CheckoutPage: React.FC = () => {
                                         value={paymentDetails.cardType}
                                         onChange={handlePayMethodChange}
                                         className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                        // Add data-testid attribute with value 'card-type'
+                                        data-testid="card-type"
                                     >
                                         {['Visa', 'Mastercard', 'American Express'].map((type) => (
                                             <option key={type} value={type}>
@@ -173,6 +195,8 @@ const CheckoutPage: React.FC = () => {
                                         value={paymentDetails.expiryDate}
                                         onChange={handleStringPayMethodChange}
                                         className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                        // Add data-testid attribute with value 'card-expiry-date'
+                                        data-testid="card-expiry-date"
                                     />
                                 </div>
 
@@ -185,6 +209,8 @@ const CheckoutPage: React.FC = () => {
                                         value={paymentDetails.checkSum}
                                         onChange={handleStringPayMethodChange}
                                         className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                        // Add data-testid attribute with value 'card-checksum'
+                                        data-testid="card-checksum"
                                     />
                                 </div>
                             </div>
@@ -198,6 +224,8 @@ const CheckoutPage: React.FC = () => {
                                     value={paymentDetails.cardNumber}
                                     onChange={handleStringPayMethodChange}
                                     className="w-full px-4 py-2 rounded bg-secondary text-background"
+                                    // Add data-testid attribute with value 'card-number'
+                                    data-testid="card-number"
                                 />
                             </div>
                         </form>
@@ -223,6 +251,8 @@ const CheckoutPage: React.FC = () => {
                     <button
                         onClick={handleSubmit}
                         className="mt-6 w-full bg-accent text-background px-6 py-2 rounded hover:bg-accent-dark"
+                        // Add data-testid attribute with value 'place-order'
+                        data-testid="place-order"
                     >
                         Place Order
                     </button>

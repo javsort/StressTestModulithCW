@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+/* This class was pretty much overriden by tailwind.config.js */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -28,6 +31,7 @@ a:hover {
 
 body {
   margin: 0;
+  /*These were clashing with Tailwind*/
   /*display: flex;*/
   /*place-items: center;*/
   /*min-width: 320px;*/

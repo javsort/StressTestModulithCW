@@ -1,3 +1,7 @@
+/*
+  This file is used to style the App component. Also kind of overriden by Tailwind CSS.
+*/
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
