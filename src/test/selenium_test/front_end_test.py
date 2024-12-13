@@ -114,10 +114,10 @@ def performUiTest(
         print("Order placed successfully \nAsserting order success...")
 
         # Verify order success
-        order_confirmation = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1[data-testid='successful-payment']"))).text
-        assert "Payment Successful!" in order_confirmation, "Order confirmation failed"
+        order_confirmation = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "p[data-testid='successful-payment']"))).text
+        assert "Thank you for your purchase! You can go back to the shop now." in order_confirmation, "Order confirmation failed"
 
-        print("Order confirmation successful")
+        print("Order confirmation successful \nTest completed successfully!!!")
 
     finally:
         # Clean up
