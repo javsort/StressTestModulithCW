@@ -13,11 +13,11 @@ def performUiTest(
     think_time: int
 ):
     # Initialize the WebDriver
-    driver = webdriver.Chrome()  # Replace with the path to your ChromeDriver if necessary
+    driver = webdriver.Chrome()
     wait = WebDriverWait(driver, 10)
 
-    # Open the application
-    driver.get(FRONT_END_URL)  # Replace with your local or deployed URL
+    # Open the app on the front-end endpoint
+    driver.get(FRONT_END_URL)
     
     try:
         # First close news, pops up automatically on first visit
